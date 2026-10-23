@@ -1,0 +1,24 @@
+{
+  "name": "Gestão Patrimonial | DeLunaTech",
+  "short_name": "Gestão Patrimonial",
+  "description": "Demonstração local do Controle de Bens Patrimoniais da DeLunaTech",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07112B",
+  "theme_color": "#07112B",
+  "icons": [
+    {
+      "src": "./assets/icone-gestao-patrimonial.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icone-gestao-patrimonial.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

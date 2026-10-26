@@ -1,4 +1,4 @@
-import { getAssetCounts, getCollectionRows, deleteTestMasterData, recordAssetTransfer, recordAssetDisposal, saveReferenceRecord, saveAssetRecord, changeSectorLocation } from "./db.js";
+import { getAssetCounts, getCollectionRows, ensureDemoSeed, deleteTestMasterData, recordAssetTransfer, recordAssetDisposal, saveReferenceRecord, saveAssetRecord, changeSectorLocation } from "./db.js";
 import { prepareWorkbook, commitPreparedWorkbook } from "./importacao.js";
 
 const $ = id => document.getElementById(id);
@@ -31,8 +31,8 @@ async function refreshDashboard() {
     $("activeAssets").textContent = counts.active;
     $("retiredAssets").textContent = counts.retired;
     $("databaseStatus").textContent = counts.total === 0
-      ? "Nenhum bem cadastrado. Importe a planilha-modelo para iniciar os testes."
-      : `Base operacional com ${counts.total} bens cadastrados.`;
+      ? "A base local ainda não contém bens. Os registros criados neste navegador aparecerão aqui."
+      : `Base local com ${counts.total} bens disponíveis para consulta.`;
   } catch (error) {
     $("databaseStatus").textContent = `Não foi possível consultar o banco: ${error.message}`;
   }
@@ -155,7 +155,9 @@ async function searchAssets() {
       const editButton = document.createElement("button");
       editButton.type = "button";
       editButton.className = "button button-secondary button-small";
-      editButton.textContent = "Editar";
+      editButton.textContent = asset._demoBase ? "Registro original" : "Editar";
+      editButton.disabled = Boolean(asset._demoBase);
+      editButton.title = asset._demoBase ? "Registro original protegido contra edição" : "Editar este bem";
       editButton.addEventListener("click", event => {
         event.stopPropagation();
         openAssetForm(asset.Tombamento).catch(error => setMessage("assetFormMessage", error.message, "error"));
@@ -290,6 +292,7 @@ async function openAssetDetail(tombamento) {
   const content = $("assetDetailContent");
   const historyBox = $("assetHistoryContent");
   modal.hidden = false;
+  modal.scrollIntoView({behavior:"smooth",block:"start"});
   content.replaceChildren();
   historyBox.replaceChildren();
   setMessage("assetDetailMessage", "Carregando ficha e histórico...");
@@ -379,10 +382,6 @@ async function openAssetDetail(tombamento) {
 
 $("closeAssetDetailBtn")?.addEventListener("click", () => { $("assetDetailModal").hidden = true; });
 $("assetDetailModal")?.addEventListener("click", event => {
-  if (event.target === $("assetDetailModal")) $("assetDetailModal").hidden = true;
-});
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && $("assetDetailModal") && !$("assetDetailModal").hidden) $("assetDetailModal").hidden = true;
 });
 
 
@@ -1174,7 +1173,8 @@ $("commitImportBtn").addEventListener("click", async () => {
 currentUser = { uid: "demo-local", email: "Demonstração local" };
 currentProfile = { perfil: "ADM" };
 showApp();
-refreshDashboard().then(loadCategories).catch(error => console.error("Falha ao carregar a demonstração local:", error));
+activateView("assetsView");
+ensureDemoSeed().then(() => refreshDashboard()).then(async () => { await loadCategories(); await searchAssets(); }).catch(error => console.error("Falha ao carregar a demonstração local:", error));
 
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));

@@ -28,7 +28,7 @@
     <section id="appView">
       <div class="demo-notice" role="note"><strong>Ambiente de demonstração</strong><span>Use dados fictícios. As alterações ficam neste navegador; limpar os dados do navegador pode apagá-las. Não há login, sincronização ou banco de dados online.</span></div>
       <nav class="nav-tabs" aria-label="Seções do portal">
-        <button class="nav-tab active" data-view="dashboardView">Painel</button>
+        
         <button class="nav-tab" data-view="assetFormView" id="assetFormNavTab">Cadastrar Bem</button>
         <button class="nav-tab" data-view="referenceView" id="referenceNavTab">Cadastros Básicos</button>
         <button class="nav-tab" data-view="assetsView">Bens Patrimoniais</button>
@@ -36,28 +36,18 @@
         <button class="nav-tab" data-view="sectorLocationView" id="sectorLocationNavTab">Localização dos setores</button>
         <button class="nav-tab" data-view="disposalView" id="disposalNavTab">Baixa patrimonial</button>
         <button class="nav-tab" data-view="reportView">Relatório Geral</button>
-        <button class="nav-tab" data-view="importView">Importar planilha</button>
-      </nav>
+        </nav>
 
-      <section id="dashboardView" class="view">
+      <section id="assetsView" class="view">
         <div class="section-heading">
-          <div><p class="eyebrow">VISÃO GERAL</p><h2>Painel patrimonial</h2></div>
+          <div><p class="eyebrow">INVENTÁRIO</p><h2>Consulta de bens</h2><p class="section-description">Consulte o patrimônio e acompanhe os principais indicadores em uma única tela.</p></div>
         </div>
-        <div class="metrics">
+        <div class="metrics assets-overview-metrics">
           <article class="metric"><span>Total de bens</span><strong id="totalAssets">—</strong></article>
           <article class="metric"><span>Bens ativos</span><strong id="activeAssets">—</strong></article>
           <article class="metric"><span>Bens baixados</span><strong id="retiredAssets">—</strong></article>
         </div>
-        <div class="panel">
-          <h3>Estado da base</h3>
-          <p id="databaseStatus">Os dados são mantidos apenas neste navegador.</p>
-        </div>
-      </section>
-
-      <section id="assetsView" class="view" hidden>
-        <div class="section-heading">
-          <div><p class="eyebrow">INVENTÁRIO</p><h2>Consulta de bens</h2></div>
-        </div>
+        <div class="panel base-status-panel"><h3>Estado da base de demonstração</h3><p id="databaseStatus">Os dados são mantidos apenas neste navegador.</p></div>
         <div class="panel">
           <div class="search-grid">
             <div><label for="assetSearch">Pesquisar</label><input id="assetSearch" placeholder="Tombamento ou descrição"></div>
@@ -71,7 +61,7 @@
           <div class="table-wrap">
             <table>
               <thead><tr><th>Tombamento</th><th>Descrição</th><th>Categoria</th><th>Setor</th><th>Unidade/Edifício</th><th>Andar</th><th>Sala / local físico</th><th>Responsável</th><th>Situação</th><th>Ações</th></tr></thead>
-              <tbody id="assetsTableBody"><tr><td colspan="9">Carregue a base ou pesquise para consultar.</td></tr></tbody>
+              <tbody id="assetsTableBody"><tr><td colspan="10">A consulta será carregada com os dados locais disponíveis.</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -193,8 +183,8 @@
         </div>
       </section>
 
-      <div id="assetDetailModal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="assetDetailTitle">
-        <section class="modal-card">
+      <section id="assetDetailModal" class="panel asset-detail-inline" hidden aria-labelledby="assetDetailTitle">
+        <div class="modal-card-inline">
           <div class="modal-heading">
             <div><p class="eyebrow">CONSULTA PATRIMONIAL</p><h2 id="assetDetailTitle">Ficha do bem</h2></div>
             <button id="closeAssetDetailBtn" class="button button-secondary" type="button">Fechar</button>
@@ -205,8 +195,8 @@
             <h3>Histórico do bem</h3>
             <div id="assetHistoryContent"><p class="small-note">Consultando histórico...</p></div>
           </section>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <section id="sectorLocationView" class="view" hidden>
         <div class="section-heading">
